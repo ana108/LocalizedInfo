@@ -1,8 +1,7 @@
 from .. import models 
 from django.contrib.gis.geoip2 import GeoIP2
 from eventregistry import *
-import os, requests, json
-
+import os, requests, json, datetime
 class UserLocation():
     
 
@@ -32,25 +31,18 @@ class LocationWeather():
         self.latitude = latitude
         
     def getWeather(self):
-        apikey = "?apikey=" + os.environ['ACCUWEATER_API']
-        cityIdUrl = "https://dataservice.accuweather.com/locations/v1/cities/geoposition/search"+apikey
-        coordinates = "&q=" + str(self.latitude) + "," + str(self.longitude)
-        cityIdUrl += coordinates
+        apikey = "&APPID=" + os.environ['OPEN_WEATHER_API']
+        cityIdUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + str(self.latitude) + "&units=metric&lon=" + str(self.longitude) +apikey
         
         response = requests.get(cityIdUrl)
         if response.status_code == 200:
-            cityId = json.loads(response.content)['Key']
-            weatherStatusUrl = "https://dataservice.accuweather.com/currentconditions/v1/" + cityId + apikey
-            response = requests.get(weatherStatusUrl)
-            if response.status_code == 200:
-                rawContent = json.loads(response.content)
-                weatherDict = {};
-                weatherDict['status'] = rawContent[0]['WeatherText']
-                weatherDict['Temperature'] = rawContent[0]['Temperature']['Metric']['Value']
-                return weatherDict
-            else:
-                return "No weather information could be retrieved. " #TODO store the city name
+            rawContent = json.loads(response.content)
+            weatherDict = {}
+            weatherDict['status'] = rawContent['weather'][0]['description']
+            weatherDict['Temperature'] = rawContent['main']['temp']
+            return weatherDict
         else: 
+            print response
             return "No city could be found for these coordinates"
         
 class LocalNews():
@@ -59,11 +51,28 @@ class LocalNews():
         self.country = country
     
     def getTopTen(self):
-        er = EventRegistry(apiKey = '5526932d-7dc0-462f-806d-a7251cd4d9fb')
-        q = QueryArticlesIter(dateStart = datetime.date(2018, 2, 10),locationUri = er.getLocationUri(self.city))
-        res = er.execQuery(q)
-        arrOfArticles = res['articles']['results']
-        for i in range(0, len(arrOfArticles)):
-            print arrOfArticles[i]['title']
-            print arrOfArticles[i]['url']
+        startDate =  datetime.date.today() - datetime.timedelta(days=1)
+        eventRegistryApi = os.environ['EVENT_REGISTRY_APIX']
+        if eventRegistryApi == None:
+            print 'Event Registry Api Key is missing'
+            raise
+       
+        er = EventRegistry(apiKey = eventRegistryApi, repeatFailedRequestCount=1)
+        q = QueryArticlesIter(dateStart = startDate, locationUri = er.getLocationUri(self.city))
+        #res = er.execQuery(q, maxItems=10)
+        
+        res = q.execQuery(er, maxItems=10)
+        it = iter(res)
+        arrOfArticles = []
+        for article in it:
+            if article['isDuplicate'] == False:
+                articleDict = {}
+                articleDict['title'] = article['title']
+                articleDict['url'] = article['url']
+                articleDict['body'] = article['body']
+                arrOfArticles.append(articleDict)
+        
+        print len(arrOfArticles)
+        print arrOfArticles[0]['url']
+        return arrOfArticles
         
