@@ -1,0 +1,43 @@
+<div id="usrInput">
+	<label for="ipTxt"> {{ipLabel}} <input id="ipTxt" name="ipTxt" type="text" name="fname"></label>
+	<input type="button" value="Get Info" name="getInfoBtn" id="getInfoBtn" />
+</div>
+<div id="locInfo" style="visibility:hidden">
+	<span class="lbl">City: </span><span class="txt" id="cityTxt"></span>
+	<span class="lbl">Postal Code: </span><span class="txt" id="postalCodeTxt"></span>
+	<span class="lbl">Country: </span><span class="txt" id="countryTxt"></span>
+	<span class="lbl">Latitude: </span><span class="txt" id="latTxt"></span>
+	<span class="lbl">Longitude: </span><span class="txt" id="longTxt"></span>
+</div>
+<div id="weatherInfo"></div>
+<div id="localNewsInfo"></div>
+<script>
+//TODO onload, hide the ul list if there are no past queries.
+	document.getElementById("getInfoBtn").addEventListener("click", function(){
+    	console.log("Ip Address: " + document.getElementById("ipTxt").value);
+    	var request = new XMLHttpRequest();
+    	 
+    	request.onreadystatechange = function() {
+    	  if(request.readyState === 4) {
+    	    console.log("received a response")
+    	    if(request.status === 200) { 
+    	      var location = JSON.parse(request.response);
+    	      document.getElementById("cityTxt").innerHTML = location.city;
+    	      document.getElementById("postalCodeTxt").innerHTML = location.postalCode;
+    	      document.getElementById("countryTxt").innerHTML = location.country;
+    	      document.getElementById("latTxt").innerHTML = location.latitude;
+    	      document.getElementById("longTxt").innerHTML = location.longitude;
+    	      document.getElementById("locInfo").style.visibility = 'visible';
+    	    } else {
+    	      console.log('An error occurred during your request: ' +  request.status + ' ' + request.statusText);
+    	    } 
+    	  }
+    	}
+    	console.log("url: " + "{% url 'ip' %}"); 
+    	var finalUrl = "{% url 'ip' %}" + "?address=" + document.getElementById("ipTxt").value;
+    	console.log("Final URL: " + finalUrl);
+    	var testUrl = "{% url 'ip' %}";
+    	request.open('GET', finalUrl, true);
+    	request.send();
+	}); 
+</script>
