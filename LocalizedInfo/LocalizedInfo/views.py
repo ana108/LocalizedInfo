@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.template import loader
-from services.UserLocation import UserLocation, LocationWeather
+from services.UserLocation import UserLocation, LocationWeather, LocalNews
 import json
 
 def ipAddr(request):
@@ -11,6 +11,8 @@ def ipAddr(request):
     response = {}
     response['locInfo'] = locBasics
     response['weatherInfo'] = jsonWeather
+    localNews = LocalNews(locBasics['city'], locBasics['country'])
+    localNews.getTopTen()
     return HttpResponse(json.dumps(response))
 
 def index(request):
