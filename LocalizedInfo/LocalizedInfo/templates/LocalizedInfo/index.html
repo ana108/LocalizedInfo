@@ -13,7 +13,9 @@
 	<span class="lbl">Weather Conditions: </span><span class="txt" id="weatherTxt"></span>
 	<span class="lbl">Temperature: </span><span class="txt" id="tempTxt"></span>
 </div>
-<div id="localNewsInfo"></div>
+<div id="localNewsInfo" style="visibility:hidden">
+<h3>Local News of the Day</h3>
+</div>
 <script>
 //TODO onload, hide the ul list if there are no past queries.
 	document.getElementById("getInfoBtn").addEventListener("click", function(){
@@ -33,9 +35,18 @@
     	      document.getElementById("weatherTxt").innerHTML = weather.status;
     	      document.getElementById("tempTxt").innerHTML = weather.Temperature;
     	      document.getElementById("weatherInfo").style.visibility = 'visible';
+    	      
+    	      var newsArticles = JSON.parse(request.response).news;
+    	      document.getElementById("localNewsInfo").innerHTML = ""
+    	      for(var i = 0; i < newsArticles.length; i++){
+    	    	  document.getElementById("localNewsInfo").innerHTML += "<a class=\"articleTitle\" href=\"" + newsArticles[i]['url'] +"\">"  + newsArticles[i]['title'] + "</a>" + "<br />"
+    	      }
+    	      if(newsArticles.length > 0){
+    	      	document.getElementById("localNewsInfo").style.visibility = 'visible';
+    	      }	  
     	    } 
     	}
-    	
+    	//Check session object here
     	var finalUrl = "{% url 'ip' %}" + "?address=" + document.getElementById("ipTxt").value;
     	request.open('GET', finalUrl, true);
     	request.send();

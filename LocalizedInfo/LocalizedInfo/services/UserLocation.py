@@ -1,6 +1,6 @@
 from .. import models 
 from django.contrib.gis.geoip2 import GeoIP2
-from eventregistry import *
+from eventregistry import EventRegistry, QueryArticlesIter
 import os, requests, json, datetime
 class UserLocation():
     
@@ -32,6 +32,10 @@ class LocationWeather():
         
     def getWeather(self):
         apikey = "&APPID=" + os.environ['OPEN_WEATHER_API']
+        if os.environ['OPEN_WEATHER_API'] == None:
+            print 'Open Weather Api Key is missing'
+            raise
+        
         cityIdUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + str(self.latitude) + "&units=metric&lon=" + str(self.longitude) +apikey
         
         response = requests.get(cityIdUrl)
@@ -52,14 +56,13 @@ class LocalNews():
     
     def getTopTen(self):
         startDate =  datetime.date.today() - datetime.timedelta(days=1)
-        eventRegistryApi = os.environ['EVENT_REGISTRY_APIX']
-        if eventRegistryApi == None:
-            print 'Event Registry Api Key is missing'
-            raise
-       
+        try:
+            eventRegistryApi = os.environ['EVENT_REGISTRY_API']
+        except:
+            return -1,'Could not find event registry api key'
+        
         er = EventRegistry(apiKey = eventRegistryApi, repeatFailedRequestCount=1)
-        q = QueryArticlesIter(dateStart = startDate, locationUri = er.getLocationUri(self.city))
-        #res = er.execQuery(q, maxItems=10)
+        q = QueryArticlesIter(dateStart = startDate, locationUri = er.getLocationUri(self.city), sourceLocationUri=er.getLocationUri(self.country))
         
         res = q.execQuery(er, maxItems=10)
         it = iter(res)
@@ -69,10 +72,9 @@ class LocalNews():
                 articleDict = {}
                 articleDict['title'] = article['title']
                 articleDict['url'] = article['url']
-                articleDict['body'] = article['body']
+                #article['date']
+                #articleDict['body'] = article['body']
                 arrOfArticles.append(articleDict)
         
-        print len(arrOfArticles)
-        print arrOfArticles[0]['url']
-        return arrOfArticles
+        return 0,arrOfArticles
         
