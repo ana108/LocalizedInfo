@@ -37,7 +37,7 @@
     	      document.getElementById("weatherInfo").style.visibility = 'visible';
     	      
     	      var newsArticles = JSON.parse(request.response).news;
-    	      document.getElementById("localNewsInfo").innerHTML = ""
+    	      document.getElementById("localNewsInfo").innerHTML = "";
     	      for(var i = 0; i < newsArticles.length; i++){
     	    	  document.getElementById("localNewsInfo").innerHTML += "<a class=\"articleTitle\" href=\"" + newsArticles[i]['url'] +"\">"  + newsArticles[i]['title'] + "</a>" + "<br />"
     	      }
