@@ -3,7 +3,7 @@ Step 1. - Have Redis installed locally
 For windows, I used the following url to download: 
 	https://github.com/ServiceStack/redis-windows/raw/master/downloads/redis-latest.zip
 	
-One download, extract the files. 
+Once downloaded, extract the files. 
 In command line, nagivate to the newly downloaded directory and use the following command to start the service:
 	redis-server.exe redis.windows.conf
 	
@@ -26,3 +26,5 @@ Step 5. - Run the following python commands.
 	python manage.py runserver
 
 Step 6. Navigate to localhost:8000 to view the page. Enter a valid ip4 or ip6 address to test.
+
+Warning: For personal ip address; I advise against using the local ip4 address. When running ipconfig to grab an ip address; try to use the ip6 address.
