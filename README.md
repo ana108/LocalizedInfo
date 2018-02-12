@@ -15,3 +15,14 @@ Step 2. - Using pip, install the following dependencies:
 	pip install geoip2
 	pip install django-redis
 	
+Step 3. - Set up the following environment variables:
+	OPEN_WEATHER_API - see value in email
+	EVENT_REGISTRY_API - see value in email
+	
+Step 5. - Run the following python commands.
+	navigate to Project/LocalizedInfo/LocalizedInfo, such that you are in the same directory as manage.python
+	python manage.py makemigrations
+	python manage.py migrate
+	python manage.py runserver
+
+Step 6. Navigate to localhost:8000 to view the page. Enter a valid ip4 or ip6 address to test.
