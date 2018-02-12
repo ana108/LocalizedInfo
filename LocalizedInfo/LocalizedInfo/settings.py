@@ -25,7 +25,7 @@ SECRET_KEY = 'w6^=&^1t^nmhqlxi_-o5drj_o-7gnn+n1ij+==13j98@24@%(u'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['damp-shelf-87157.heroku.com']
 
 
 # Application definition
@@ -132,5 +132,5 @@ GEOIP_PATH = os.path.join(BASE_DIR, 'geodata')
 
 STATIC_URL = '/static/'
 # Configure Django App for Heroku.
-import django_heroku
-django_heroku.settings(locals())
+# import django_heroku
+# django_heroku.settings(locals())
