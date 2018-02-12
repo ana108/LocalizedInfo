@@ -125,7 +125,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-GEOIP_PATH = 'C:/Users/flute/Documents/workspace/python_projects/LocalizedInfo/geodata'
+GEOIP_PATH = os.path.join(BASE_DIR, 'geodata')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
