@@ -10,7 +10,6 @@ CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 def ipAddr(request):
     geo = UserLocation(request.GET['address'])
     locBasics = geo.geoLocate()[1]
-    print locBasics
     weather = LocationWeather(locBasics['longitude'], locBasics['latitude'])
     jsonWeather = weather.getWeather()
     response = {}

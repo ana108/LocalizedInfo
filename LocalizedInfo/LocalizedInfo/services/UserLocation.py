@@ -38,7 +38,6 @@ class UserLocation():
             cache.set(self.ipAddress, locValues)
             return 0,locValues
         else:
-            print 'object was found in cache'
             return 0, cache.get(self.ipAddress)
         
     
@@ -60,12 +59,10 @@ class LocationWeather():
                 weatherDict = {}
                 weatherDict['status'] = weather.description
                 weatherDict['Temperature'] = str(weather.temperature)
-                print 'Reusing database data'
                 return weatherDict
             else:    
                 apikey = "&APPID=" + os.environ['OPEN_WEATHER_API']
                 if os.environ['OPEN_WEATHER_API'] == None:
-                    print 'Open Weather Api Key is missing'
                     raise
                 
                 cityIdUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + str(self.latitude) + "&units=metric&lon=" + str(self.longitude) +apikey
@@ -81,10 +78,8 @@ class LocationWeather():
                     cache.add(weatherId, weatherDict)
                     return weatherDict
                 else: 
-                    print response
                     return "No weather could be found for these coordinates"
         else:
-            print 'Called weather cache'
             return weatherCache
         
 class LocalNews():
