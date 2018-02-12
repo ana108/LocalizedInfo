@@ -2,8 +2,6 @@ from .models import Location, Weather, LocalArticle
 from django.contrib.gis.geoip2 import GeoIP2
 from eventregistry import EventRegistry, QueryArticlesIter
 import os, requests, json, datetime
-#from django_redis import cache
-from django_redis.cache import RedisCache
 from django.core.cache import cache
 
 class UserLocation():    

@@ -2,6 +2,7 @@
 	<label for="ipTxt"> {{ipLabel}} <input id="ipTxt" name="ipTxt" type="text" name="fname"></label>
 	<input type="button" value="Get Info" name="getInfoBtn" id="getInfoBtn" />
 </div>
+<div id="errMsg" style="visibility:hidden"></div>
 <div id="locInfo" style="visibility:hidden">
 	<span class="lbl">City: </span><span class="txt" id="cityTxt"></span>
 	<span class="lbl">Postal Code: </span><span class="txt" id="postalCodeTxt"></span>
@@ -14,16 +15,19 @@
 	<span class="lbl">Temperature: </span><span class="txt" id="tempTxt"></span>
 </div>
 <div id="localNewsInfoCont" style="visibility:hidden">
-<h3>Local News of the Day</h3>
-<div id="localNewsInfo"></div>
+	<h3>Local News of the Day</h3>
+	<div id="localNewsInfo"></div>
 </div>
 <script>
 //TODO onload, hide the ul list if there are no past queries.
+	console.log("The sound of Crickets");
 	document.getElementById("getInfoBtn").addEventListener("click", function(){
-    	var request = new XMLHttpRequest();
-    	 
+		var request = new XMLHttpRequest();
+   	 
     	request.onreadystatechange = function() {
+
     	  if(request.readyState === 4 && request.status === 200) {
+        	  //Note: I did not come up with the reg expressions below.	
     	      var location = JSON.parse(request.response).locInfo; //TODO, send back several objects
     	      document.getElementById("cityTxt").innerHTML = location.city;
     	      document.getElementById("postalCodeTxt").innerHTML = location.postalCode;
@@ -44,12 +48,27 @@
     	      }
     	      if(newsArticles.length > 0){
     	      	document.getElementById("localNewsInfoCont").style.visibility = 'visible';
-    	      }	  
+    	      }
+    	      //TODO update session object here
     	    } 
     	}
     	//Check session object here
-    	var finalUrl = "{% url 'ip' %}" + "?address=" + document.getElementById("ipTxt").value;
-    	request.open('GET', finalUrl, true);
-    	request.send();
-	}); 
+ 	    var strExp6 = "^((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*::((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4}))*|((?:[0-9A-Fa-f]{1,4}))((?::[0-9A-Fa-f]{1,4})){7}$";
+    	var regExp6 = new RegExp(strExp6);
+    	var strExp4 = "^([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])\\.([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])\\.([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])\\.([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])$";
+    	var regExp4 = new RegExp(strExp4);
+    	console.log("hello?");
+    	if(regExp6.test(document.getElementById("ipTxt").value) || regExp4.test(document.getElementById("ipTxt").value)){
+    		var finalUrl = "{% url 'ip' %}" + "?address=" + document.getElementById("ipTxt").value;
+    		request.open('GET', finalUrl, true);
+    		request.send();
+    		document.getElementById("errMsg").style.visibility = 'hidden';
+    	}else{
+    		document.getElementById("errMsg").innerHTML = "Please provide a valid IP address";
+    		document.getElementById("errMsg").style.visibility = 'visible';
+    		document.getElementById("errMsg").style.color = 'red';
+    		console.log("failed correctly");
+    	}
+	});
+	 
 </script>
