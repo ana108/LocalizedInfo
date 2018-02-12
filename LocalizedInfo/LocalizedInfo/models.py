@@ -3,16 +3,11 @@ from django.db import models
 class Location(models.Model):
     #author = models.ForeignKey('auth.User',on_delete=models.CASCADE)
     ipAddress = models.TextField(primary_key=True)
-    city = models.TextField()
+    city = models.TextField(blank=True, null=True)
     country = models.CharField(max_length=50)
-    postalCode = models.CharField(max_length=15)
-    latitude = models.DecimalField(max_digits=10,decimal_places=3)
-    longitude = models.DecimalField(max_digits=10,decimal_places=3)
-    class Meta:
-        unique_together = (("latitude", "longitude"))
-    #latitude = models.ForeignKey('Weather.latitude', on_delete=models.CASCADE) # enable after insert
-    #longitude = models.ForeignKey('Weather.longitude', on_delete=models.CASCADE) # enable after insert
-    #ipAddress = models.PrimaryKey()
+    postalCode = models.CharField(max_length=15,blank=True, null=True)
+    latitude = models.DecimalField(max_digits=10,decimal_places=4)
+    longitude = models.DecimalField(max_digits=10,decimal_places=4)
     
     def publish(self):
         #Do not write if is already in db
@@ -35,11 +30,11 @@ class Weather(models.Model):
             self.save()
 
     def __str__(self):
-        return str(self.latitude) + "," + str(self.longitude)
+        return str(self. date) + "," + str(self.latitude) + "," + str(self.longitude)
     
 
 class LocalArticle(models.Model):
-    city = models.TextField()
+    city = models.TextField(blank=True, null=True)
     country = models.CharField(max_length=50)
     title = models.TextField()
     url = models.TextField()

@@ -1,11 +1,16 @@
 from django.http import HttpResponse
+from django.conf import settings
 from django.template import loader
 from services.UserLocation import UserLocation, LocationWeather, LocalNews
 import json
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 def ipAddr(request):
     geo = UserLocation(request.GET['address'])
-    locBasics = geo.geoLocate()
+    locBasics = geo.geoLocate()[1]
+    print locBasics
     weather = LocationWeather(locBasics['longitude'], locBasics['latitude'])
     jsonWeather = weather.getWeather()
     response = {}
