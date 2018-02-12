@@ -28,3 +28,6 @@ Step 5. - Run the following python commands.
 Step 6. Navigate to localhost:8000 to view the page. Enter a valid ip4 or ip6 address to test.
 
 Warning: For personal ip address; I advise against using the local ip4 address. When running ipconfig to grab an ip address; try to use the ip6 address.
+
+To test out this live go to:
+https://damp-waters-23539.herokuapp.com/
