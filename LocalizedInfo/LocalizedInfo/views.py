@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.conf import settings
 from django.template import loader
-from UserLocation import UserLocation, LocationWeather, LocalNews
+from .UserLocation import UserLocation, LocationWeather, LocalNews
 import json
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 
