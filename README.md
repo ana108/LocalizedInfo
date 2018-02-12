@@ -20,7 +20,7 @@ Step 3. - Set up the following environment variables:
 	EVENT_REGISTRY_API - see value in email
 	
 Step 5. - Run the following python commands.
-	navigate to Project/LocalizedInfo/LocalizedInfo, such that you are in the same directory as manage.python
+	navigate to Project/LocalizedInfo/LocalizedInfo, such that you are in the same directory as manage.py
 	python manage.py makemigrations
 	python manage.py migrate
 	python manage.py runserver
