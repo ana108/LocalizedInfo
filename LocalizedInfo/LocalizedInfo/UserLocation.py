@@ -1,4 +1,4 @@
-from ..models import Location, Weather, LocalArticle 
+from models import Location, Weather, LocalArticle 
 from django.contrib.gis.geoip2 import GeoIP2
 from eventregistry import EventRegistry, QueryArticlesIter
 import os, requests, json, datetime
